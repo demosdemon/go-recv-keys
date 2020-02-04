@@ -2,7 +2,7 @@
 
 set -eux
 
-go build -a -ldflags "-s -w" -o go-recv-keys
+go build
 
 node() {
 	declare -a KEYSERVERS=(
