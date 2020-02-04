@@ -32,7 +32,7 @@ func main() {
 	pflag.StringSliceVarP(&flagKeyServers, "keyserver", "k", nil, "The key server to query (multiple allowed).")
 	pflag.BoolVar(&flagJSON, "json", false, "Output as JSON")
 	pflag.BoolVar(&flagYAML, "yaml", false, "Output as YAML")
-	pflag.BoolVar(&flagImport, "import", false, "Execute `gpg --batch --import` with results.")
+	pflag.BoolVar(&flagImport, "import", false, "Execute \"gpg --batch --import\" with results.")
 	pflag.Parse()
 
 	if flagJSON && flagYAML {
