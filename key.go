@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/strothj/hkp"
@@ -31,23 +32,22 @@ func (k *Key) Resolve(ctx context.Context, timeout time.Duration, keyservers []*
 	for _, ks := range keyservers {
 		go func(ks *KeyServer) {
 			r := ks.Resolve(ctx, k)
-			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
-			select {
-			case <-ctx.Done():
-			case ch <- r:
-			}
+			log.Printf("%v", r)
+			ch <- r
 		}(ks)
 	}
 
 	var last *Result
 	for idx := 0; idx < len(keyservers); idx++ {
-		last = <-ch
+		r := <-ch
+		if last == nil {
+			last = r
+		}
+		if last.Error != nil {
+			last = r
+		}
 		if last.Error == nil {
-			break
+			cancel()
 		}
 	}
 
